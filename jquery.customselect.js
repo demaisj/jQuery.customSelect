@@ -28,7 +28,7 @@
 		_this.$select.insertAfter(_this.$element);
 
 		// Hide current select
-		//_this.$element.hide();
+		_this.$element.hide();
 
 		// Render options
 		_this.render();
