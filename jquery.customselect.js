@@ -5,15 +5,21 @@
  * The MIT License
  * (c) 2014 Death_Miner
  */
+
+/* jshint undef: true, unused: true */
+/* global jQuery */
+
 (function($){
+	"use strict";
+
 	/*
 	 * PLUGIN MAIN CLASS
 	 */
-	var customSelect = function(element, options){
+	var CustomSelect = function(element, options){
 		// Store args in this (_this)
 		var _this = this;
-		_this.$element  = $(element)
-		_this.options   = $.extend({}, customSelect.DEFAULTS, options)
+		_this.$element  = $(element);
+		_this.options   = $.extend({}, CustomSelect.DEFAULTS, options);
 
 		// Create custom select
 		_this.$select = $("<div></div>");
@@ -72,7 +78,7 @@
 
 			// Remove the selected class of the selected option
 			_this.$select.find(".select-options li[data-opt-id='"+_this.currentVal.id+"']").removeClass("select-selected");
-		})
+		});
 		
 		// Select (trigger) focused (ATTACH KEY EVENT IF ACTIVATED)
 		if(_this.options.keyNav){
@@ -93,15 +99,14 @@
 							// Check if option exisst
 							if(typeof prev != "undefined"){
 								// Check if option is not disabled
-								if(prev.disabled != true){
+								if(prev.disabled !== true){
 									// If not, save value & exit
 									_this.val(prev.id);
 									return false;
-									break;
 								}
 
 								// Save key for next iteration
-								key = prev.value
+								key = prev.value;
 							}
 							else{
 								// Exit loop if option doesn't exists
@@ -117,20 +122,19 @@
 						// Loop while we don't find an option
 						while(true){
 							// Get next option
-							var prev = _this.nextOption(key);
+							var next = _this.nextOption(key);
 
 							// Check if option exisst
-							if(typeof prev != "undefined"){
+							if(typeof next != "undefined"){
 								// Check if option is not disabled
-								if(prev.disabled != true){
+								if(next.disabled !== true){
 									// If not, save value & exit
-									_this.val(prev.id);
+									_this.val(next.id);
 									return false;
-									break;
 								}
 
 								// Save key for next iteration
-								key = prev.value
+								key = next.value;
 							}
 							else{
 								// Exit loop if option doesn't exists
@@ -159,13 +163,13 @@
 	/*
 	 * PLUGIN VERSION
 	 */
-	customSelect.VERSION = "1.0.0";
+	CustomSelect.VERSION = "1.0.0";
 
 	
 	/*
 	 * PLUGIN DEFAULT SETTINGS
 	 */
-	customSelect.DEFAULTS = {
+	CustomSelect.DEFAULTS = {
 		cssClass: "custom-select",
 		keyNav: true,
 		markup: "<button type='button' class='select-trigger'></button><div class='select-inner-wrap'><ul class='select-options'></ul></div>",
@@ -175,7 +179,7 @@
 	/*
 	 * RENDER OPTIONS
 	 */
-	customSelect.prototype.render = function(){
+	CustomSelect.prototype.render = function(){
 		// Clear current options
 		var _this = this;
 		_this.selectOptions = [];
@@ -200,10 +204,10 @@
 			if(optionObj.html) option.html(optionObj.html);
 			else option.text(optionObj.name);
 
-			if(optionObj.disabled) option.addClass("select-disabled")
+			if(optionObj.disabled) option.addClass("select-disabled");
 
 			option.appendTo(_this.$select.find(".select-options"));
-		})
+		});
 
 		// Set curent value
 		_this.val(_this.$element.val());
@@ -212,19 +216,19 @@
 	/*
 	 * GET AN OPTION BY ITS KEY
 	 */
-	customSelect.prototype.searchOptionByKey = function(key){
+	CustomSelect.prototype.searchOptionByKey = function(key){
 		var _this = this;
 		for (var i = _this.selectOptions.length - 1; i >= 0; i--) {
 			if(_this.selectOptions[i].value === key){
 				return _this.selectOptions[i];
 			}
-		};
+		}
 	};
 
 	/*
 	 * GET THE NEXT OPTION
 	 */
-	customSelect.prototype.nextOption = function(key){
+	CustomSelect.prototype.nextOption = function(key){
 		var _this = this,
 			key = key || _this.currentVal.value;
 
@@ -238,7 +242,7 @@
 	/*
 	 * GET THE PREVIOUS OPTION
 	 */
-	customSelect.prototype.prevOption = function(key){
+	CustomSelect.prototype.prevOption = function(key){
 		var _this = this,
 			key = key || _this.currentVal.value;
 		
@@ -252,7 +256,7 @@
 	/*
 	 * SET OR GET THE VALUE
 	 */
-	customSelect.prototype.val = function(id){
+	CustomSelect.prototype.val = function(id){
 		var _this = this,
 			optionObj;
 
@@ -287,12 +291,12 @@
 	/*
 	 * DESTROY CUSTOM SELECT INSTANCE
 	 */
-	customSelect.prototype.destroy = function(){
+	CustomSelect.prototype.destroy = function(){
 		var _this = this;
 
 		_this.$element.show();
 		_this.$select.empty().remove();
-	}
+	};
 
 	/*
 	 * PLUGIN DEFINITION
@@ -300,28 +304,28 @@
 	function Plugin(option, add_options) {
 
 		return this.filter("select").each(function(){
-			var $this   = $(this)
-			var data    = $this.data("customSelect")
-			var options = typeof option == 'object' && option
+			var $this   = $(this),
+				data    = $this.data("customSelect"),
+				options = typeof option == 'object' && option;
 
-			if (!data) $this.data("customSelect", (data = new customSelect(this, options)))
+			if (!data) $this.data("customSelect", (data = new CustomSelect(this, options)));
 
-			if (option == "render") data.render()
-			else if (option == "val") data.val(add_options)
-			else if (option == "destroy") data.destroy()
+			if (option == "render") data.render();
+			else if (option == "val") data.val(add_options);
+			else if (option == "destroy") data.destroy();
 		});
 	}
 
 	var old = $.fn.customSelect;
 
 	$.fn.customSelect = Plugin;
-	$.fn.customSelect.Constructor = customSelect;
+	$.fn.customSelect.Constructor = CustomSelect;
 
 	/*
 	 * CUSTOM SELECT NO CONFLICT
 	 */
 	$.fn.customSelect.noConflict = function () {
-		$.fn.customSelect = old
-		return this
-	}
+		$.fn.customSelect = old;
+		return this;
+	};
 })(jQuery);
