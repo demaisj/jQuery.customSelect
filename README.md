@@ -3,7 +3,7 @@ jQuery.customSelect
 
 Simple &amp; lightweight select customizer
 
-*For the latest release (v1.0.0), see the releases tab.*
+*For the latest release (v1.0.1), see the releases tab.*
 
 ##Features
 
