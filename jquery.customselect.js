@@ -1,6 +1,6 @@
 /*!
  * jQuery.customSelect: Simple & lightweight select customizer
- * Version 1.0.0
+ * Version 1.0.1
  * https://github.com/DeathMiner/jQuery.customSelect
  * The MIT License
  * (c) 2014 Death_Miner
@@ -53,31 +53,6 @@
 		// On body click, close select
 		$("body").on("click", function(){
 			_this.$select.removeClass("select-open");
-		});
-		
-		// Option clicked
-		_this.$select.find(".select-options li").on("click", function(){
-			var $option = $(this);
-
-			if(!$option.hasClass("select-disabled")){
-				// Set val
-				_this.val(parseInt($option.attr("data-opt-id"), 10));
-				
-				// focus select
-				_this.$select.find(".select-trigger").focus();
-			}
-			else{
-				return false;
-			}
-		})
-		// Option hover
-		.on("mouseover", function(){
-			// Add the hover class
-			_this.$select.find(".select-options li").removeClass("select-hover");
-			$(this).addClass("select-hover");
-
-			// Remove the selected class of the selected option
-			_this.$select.find(".select-options li[data-opt-id='"+_this.currentVal.id+"']").removeClass("select-selected");
 		});
 		
 		// Select (trigger) focused (ATTACH KEY EVENT IF ACTIVATED)
@@ -184,6 +159,9 @@
 		var _this = this;
 		_this.selectOptions = [];
 
+		// Delete all old options
+		_this.$select.find(".select-options li").empty().remove();
+
 		// Iterate through select options
 		_this.$element.find("option").each(function(){
 			// Save option data
@@ -211,6 +189,31 @@
 
 		// Set curent value
 		_this.val(_this.$element.val());
+		
+		// Option clicked
+		_this.$select.find(".select-options li").on("click", function(){
+			var $option = $(this);
+
+			if(!$option.hasClass("select-disabled")){
+				// Set val
+				_this.val(parseInt($option.attr("data-opt-id"), 10));
+				
+				// focus select
+				_this.$select.find(".select-trigger").focus();
+			}
+			else{
+				return false;
+			}
+		})
+		// Option hover
+		.on("mouseover", function(){
+			// Add the hover class
+			_this.$select.find(".select-options li").removeClass("select-hover");
+			$(this).addClass("select-hover");
+
+			// Remove the selected class of the selected option
+			_this.$select.find(".select-options li[data-opt-id='"+_this.currentVal.id+"']").removeClass("select-selected");
+		});
 	};
 
 	/*
@@ -278,7 +281,7 @@
 		else _this.$select.find(".select-trigger").text(optionObj.name);
 
 		// Set legacy select value
-		_this.$element.val(optionObj.value);
+		_this.$element.val(optionObj.value).trigger("change");
 
 		// Set new local value
 		_this.currentVal = optionObj;
